@@ -1,0 +1,79 @@
+<!-- Authors: Alexander Brückner, 742830
+	       Franziska Drobnik, 742079 -->
+<!-- Based on https://socket.io/get-started/chat/ -->
+
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font: 13px Helvetica, Arial; }
+	  ul {background: grey; }
+      form { background: #d3d3d3; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; border-radius: 15px; box-shadow: 0 0 5px black;}
+      form button { background: #C0C0C0; width: 9%; border: none; padding: 10px; border-radius: 15px; box-shadow: 0 0 5px black; }
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages li { padding: 5px 10px; }
+      #messages li:nth-child(odd) { background: #eee; }
+    </style>
+  </head>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+$(function () {
+
+	//Check if the name is valid
+	if(sessionStorage.chatNickName == null){
+	alert('Please login first.');
+	$(location).attr('href', '/');
+	return;
+	}
+
+  //Create the socket on the client side
+  var socket = io();
+  //Let the server know we're here and give it our nickname
+  socket.emit('clientjoin',sessionStorage.chatNickName);
+  delete sessionStorage.chatNickName;
+  $('form').submit(function(){
+    socket.emit('chat message', $('#m').val());
+    $('#m').val('');
+	//Return false to avoid the form submitting 
+    return false;
+  });
+  
+  
+  //When the client receives a message, put it on the page
+  socket.on('chat message', function(msg){
+    $('#messages').append($('<li>').text(msg));
+  });
+  
+  //If the given nickname is taken already, redirect them to the login page
+  //Prone to change as the implementation with the Socket is stupid - but 
+  //the requirements did not name such a functionality in the first place..
+  //Then again, I really don't have the time to learn session handling...
+  
+	socket.on('nametaken',function(msg){
+	alert(msg);
+	$(location).attr('href', '/')
+  });
+  
+  //Handle a server announcment. The same thing as message, but with the Server as the sender
+  //(Sender as in, the Sender shown in the chat)
+  socket.on('serverannouncement',function(msg){
+  $('#messages').append($('<li>').text(msg));
+  });
+  
+});
+</script>
+
+  <body>
+	<div id="bodyDiv">
+		<ul id="messages"></ul>
+		<form id="chatForm"action="">
+			<input id="m" autocomplete="off" /><button id="button">Send</button>
+		</form>
+	</div>
+  </body>
+</html>
