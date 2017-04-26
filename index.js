@@ -304,7 +304,6 @@ http.listen(port, function(){
   console.log('listening on *:'+port);
 
 
-
 //What the pool does is basically store the database credentials and create connections on demand.
 //If it detects an active connection, no new ones are created.
 	pool = mysql.createPool({

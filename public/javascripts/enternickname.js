@@ -9,9 +9,6 @@ function registerUser(){
 	
 	var newnickname = $("input").get(0).value;
 	var newpassword = $("input").get(1).value;
-	
-	
-	
 	socket = io();
 	socket.emit('register',{username : newnickname, userpassword : newpassword});
 	socket.on('registrationresult',function(data){
