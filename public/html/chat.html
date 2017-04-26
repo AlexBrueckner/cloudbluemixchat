@@ -30,12 +30,18 @@ $(function () {
 	$(location).attr('href', '/');
 	return;
 	}
+	
+
 
   //Create the socket on the client side
   var socket = io();
   //Let the server know we're here and give it our nickname
-  socket.emit('clientjoin',sessionStorage.chatNickName);
+  var clientdata = new Object();
+  clientdata.nickname = sessionStorage.chatNickName;
+  clientdata.password = sessionStorage.chatPassword;
+  socket.emit('clientjoin',clientdata);
   delete sessionStorage.chatNickName;
+  delete sessionStorage.chatPassword;
   $('form').submit(function(){
     socket.emit('chat message', $('#m').val());
     $('#m').val('');

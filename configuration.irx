@@ -1,0 +1,9 @@
+<Configuration>
+  <Targets>
+    <Target path="F:\cloud_bluemix\nodechat">
+      <Include>index.js</Include>
+      <Exclude>thirdPartyJars/</Exclude>
+      <Exclude>*test*</Exclude>
+    </Target>
+  </Targets>
+</Configuration>

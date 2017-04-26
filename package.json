@@ -2,8 +2,13 @@
   "name": "socket-chat-example",
   "version": "0.0.1",
   "description": "my first socket.io app",
+  "scripts": {
+    "test": "true",
+    "start": "node index.js"
+  },
   "dependencies": {
     "express": "^4.15.2",
+    "request": "^2.81.0",
     "socket.io": "^1.7.3"
   }
 }
